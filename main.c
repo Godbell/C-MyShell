@@ -7,9 +7,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <fcntl.h>
 
 #define COMMAND_MEM 10
 #define COMMAND_MAX 1024
@@ -33,23 +35,33 @@ int main()
     int circular_cursor_l = 0;
     int circular_cursor_r = 0;
 
-    //
     while (true)
     {
-        printf("12191579_shell$ ");
+            printf("12191579_shell$ ");
         fgets(command_rec[circular_cursor_r].input_command, COMMAND_MAX - 1, stdin);
 
-        // built-in command
-        if (strcmp(command_rec[circular_cursor_r].input_command, "quit") == 0)
+        // built-in commands
+        if (strcmp(command_rec[circular_cursor_r].input_command, "quit\n") == 0)
         {
             printf("myshell developed by 김종하(12191579)\n");
             break;
         }
-        else if (strcmp(command_rec[circular_cursor_r].input_command, "history") == 0)
+        else if (strcmp(command_rec[circular_cursor_r].input_command, "history\n") == 0)
         {
+            for (int i = circular_cursor_l; i < COMMAND_MEM; i++)
+            {
+                printf("%s\n", command_rec[i].input_command);
+            }
 
+            if (circular_cursor_l > circular_cursor_r)
+            {
+                for (int i = 0 ; i < circular_cursor_r ; i++)
+                {
+                    printf("%s", command_rec[i].input_command);
+                }
+            }
         }
-        else if (strcmp(command_rec[circular_cursor_r].input_command, "help") == 0)
+        else if (strcmp(command_rec[circular_cursor_r].input_command, "help\n") == 0)
         {
 
         }
@@ -69,7 +81,7 @@ int main()
         // command record management
         if (circular_cursor_l < circular_cursor_r)
         {
-            if (circular_cursor_r == COMMAND_MAX - 1)
+            if (circular_cursor_r == COMMAND_MEM - 1)
             {
                 circular_cursor_r = 0;
                 circular_cursor_l = 1;
@@ -81,7 +93,7 @@ int main()
         }
         else if (circular_cursor_l > circular_cursor_r)
         {
-            if (circular_cursor_l == COMMAND_MAX - 1)
+            if (circular_cursor_l == COMMAND_MEM - 1)
             {
                 circular_cursor_l = 0;
                 circular_cursor_r = COMMAND_MEM - 1;
@@ -103,19 +115,15 @@ void tokenize(comrec_t* self)
 
     for (int i = COMMAND_MAX - 2 ; i >= 1 ; i--)
     {
-        if (org_str[i] == '&' && (org_str[i + 1] == ' ' || org_str[i + 1] == NULL))
+        if (org_str[i] == '&')
         {
             self->is_background = true;
-            org_str[i] = NULL;
+            org_str[i] = '\0';
             break;
         }
     }
 
     char* token_str = strtok(org_str, " ");
-    if (strcmp(token_str, "&") == 0)
-    {
-        self->is_background = true;
-    }
 
     int i = 0;
     while (token_str != NULL)
@@ -127,10 +135,36 @@ void tokenize(comrec_t* self)
 
 void execute(comrec_t* self)
 {
+    pid_t pid;
+    int cur_state;
 
+    if ((pid = fork()) < 0)
+    {
+        printf("error during fork");
+    }
+    else if (pid == 0)
+    {
+        execvp(self->tokenized[0], self->tokenized);
+        exit(1);
+    }
+
+    wait(&cur_state);
 }
 
 void execute_bg(comrec_t* self)
 {
+    pid_t pid;
+    int bg;
 
+    if ((pid = fork()) < 0)
+    {
+        printf("error during fork");
+    }
+    else if (pid == 0)
+    {
+        bg = open("/dev/null", O_RDONLY);
+        dup2(bg, STDOUT_FILENO);
+        execvp(self->input_command, self->tokenized);
+        exit(0);
+    }
 }

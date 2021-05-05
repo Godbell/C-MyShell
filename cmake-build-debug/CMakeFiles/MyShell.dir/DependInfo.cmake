@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "E:/Programming/4_C/MyShell/main.c" "E:/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/MyShell.dir/main.c.obj"
+  "/cygdrive/e/Programming/4_C/MyShell/main.c" "/cygdrive/e/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/MyShell.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

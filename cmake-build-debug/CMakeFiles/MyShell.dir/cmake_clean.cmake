@@ -1,7 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MyShell.dir/main.c.obj"
+  "CMakeFiles/MyShell.dir/main.c.o"
   "MyShell.exe"
-  "MyShell.exe.manifest"
   "MyShell.pdb"
   "libMyShell.dll.a"
 )
