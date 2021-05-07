@@ -1,3 +1,0 @@
-/cygdrive/e/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/e/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/e/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/MyShell.dir
