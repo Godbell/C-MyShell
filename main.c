@@ -44,13 +44,13 @@ int main()
         if (strcmp(command_rec[circular_cursor_r].input_command, "quit\n") == 0)
         {
             printf("myshell developed by 김종하(12191579)\n");
-            break;
+            return 0;
         }
         else if (strcmp(command_rec[circular_cursor_r].input_command, "history\n") == 0)
         {
             if (circular_cursor_l < circular_cursor_r)
             {
-                for (int i = circular_cursor_l ; i <= circular_cursor_r ; i++)
+                for (int i = circular_cursor_l ; i < circular_cursor_r ; i++)
                 {
                     printf("%s", command_rec[i].input_command);
                 }
@@ -62,7 +62,7 @@ int main()
                     printf("%s", command_rec[i].input_command);
                 }
 
-                for (int i = 0 ; i <= circular_cursor_r ; i++)
+                for (int i = 0 ; i < circular_cursor_r; i++)
                 {
                     printf("%s", command_rec[i].input_command);
                 }
@@ -77,11 +77,11 @@ int main()
             tokenize(&command_rec[circular_cursor_r]);
             if (command_rec[circular_cursor_r].is_background)
             {
-                execute(&command_rec[circular_cursor_r]);
+                execute_bg(&command_rec[circular_cursor_r]);
             }
             else
             {
-                execute_bg(&command_rec[circular_cursor_r]);
+                execute(&command_rec[circular_cursor_r]);
             }
         }
 
@@ -112,8 +112,6 @@ int main()
             }
         }
     }
-
-    return 0;
 }
 
 void tokenize(comrec_t* self)
@@ -121,12 +119,12 @@ void tokenize(comrec_t* self)
     char* org_str;
     strncpy(org_str, self->input_command, COMMAND_MAX);
 
-    for (int i = COMMAND_MAX - 2 ; i >= 1 ; i--)
+    for (int i = COMMAND_MAX - 2 ; i >= 0 ; i--)
     {
         if (org_str[i] == '&')
         {
             self->is_background = true;
-            org_str[i] = '\0';
+            org_str[i] = ' ';
             break;
         }
 
@@ -160,8 +158,12 @@ void execute(comrec_t* self)
         execvp(self->tokenized[0], self->tokenized);
         exit(1);
     }
-
-    wait(&cur_state);
+    else
+    {
+        pid = wait(&cur_state);
+        wait(&cur_state);
+        printf("Process %d retuned with status %d\n\n", pid, cur_state);
+    }
 }
 
 void execute_bg(comrec_t* self)
@@ -177,7 +179,7 @@ void execute_bg(comrec_t* self)
     {
         bg = open("/dev/null", O_RDONLY);
         dup2(bg, STDOUT_FILENO);
-        execvp(self->input_command, self->tokenized);
-        exit(0);
+        execvp(self->tokenized[0], self->tokenized);
+        exit(1);
     }
 }
