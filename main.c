@@ -37,7 +37,7 @@ int main()
 
     while (true)
     {
-            printf("12191579_shell$ ");
+        printf("12191579_shell$ ");
         fgets(command_rec[circular_cursor_r].input_command, COMMAND_MAX - 1, stdin);
 
         // built-in commands
@@ -48,14 +48,21 @@ int main()
         }
         else if (strcmp(command_rec[circular_cursor_r].input_command, "history\n") == 0)
         {
-            for (int i = circular_cursor_l; i < COMMAND_MEM; i++)
+            if (circular_cursor_l < circular_cursor_r)
             {
-                printf("%s\n", command_rec[i].input_command);
+                for (int i = circular_cursor_l ; i <= circular_cursor_r ; i++)
+                {
+                    printf("%s", command_rec[i].input_command);
+                }
             }
-
-            if (circular_cursor_l > circular_cursor_r)
+            else if (circular_cursor_l > circular_cursor_r)
             {
-                for (int i = 0 ; i < circular_cursor_r ; i++)
+                for (int i = circular_cursor_l; i < COMMAND_MEM; i++)
+                {
+                    printf("%s", command_rec[i].input_command);
+                }
+
+                for (int i = 0 ; i <= circular_cursor_r ; i++)
                 {
                     printf("%s", command_rec[i].input_command);
                 }
@@ -79,7 +86,7 @@ int main()
         }
 
         // command record management
-        if (circular_cursor_l < circular_cursor_r)
+        if (circular_cursor_l <= circular_cursor_r)
         {
             if (circular_cursor_r == COMMAND_MEM - 1)
             {
@@ -111,7 +118,8 @@ int main()
 
 void tokenize(comrec_t* self)
 {
-    char* org_str = self->input_command;
+    char* org_str;
+    strncpy(org_str, self->input_command, COMMAND_MAX);
 
     for (int i = COMMAND_MAX - 2 ; i >= 1 ; i--)
     {
@@ -121,6 +129,11 @@ void tokenize(comrec_t* self)
             org_str[i] = '\0';
             break;
         }
+
+        if (org_str[i] == '\n')
+        {
+            org_str[i] = ' ';
+        }
     }
 
     char* token_str = strtok(org_str, " ");
@@ -128,8 +141,8 @@ void tokenize(comrec_t* self)
     int i = 0;
     while (token_str != NULL)
     {
-        token_str = strtok(org_str, " ");
         self->tokenized[i++] = token_str;
+        token_str = strtok(NULL, " ");
     }
 }
 
