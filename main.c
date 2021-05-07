@@ -26,7 +26,6 @@ struct comrec_t
 };
 void tokenize(comrec_t* self);      // tokenizes an input command
 void execute(comrec_t* self);
-void execute_bg(comrec_t* self);
 
 int main()
 {
