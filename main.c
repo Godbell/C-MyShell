@@ -128,7 +128,7 @@ void tokenize(comrec_t* self)
     char org_str[COMMAND_MAX];
     strncpy(org_str, self->input_command, COMMAND_MAX);
 
-    for (int i = COMMAND_MAX - 2 ; i >= 0 ; i--)
+    for (int i = COMMAND_MAX - 1 ; i >= 0 ; i--)
     {
         if (org_str[i] == '&')
         {
