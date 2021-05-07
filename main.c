@@ -162,7 +162,7 @@ void execute(comrec_t* self)
     {
         pid = wait(&cur_state);
         wait(&cur_state);
-        printf("Process %d retuned with status %d\n\n", pid, cur_state);
+        printf("Process %d returned with status %d\n\n", pid, cur_state);
     }
 }
 
