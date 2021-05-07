@@ -116,7 +116,7 @@ int main()
 
 void tokenize(comrec_t* self)
 {
-    char* org_str;
+    char org_str[COMMAND_MAX];
     strncpy(org_str, self->input_command, COMMAND_MAX);
 
     for (int i = COMMAND_MAX - 2 ; i >= 0 ; i--)
