@@ -1,0 +1,18 @@
+12191579SHELL(1)                          Inha Univ.                        12191579SHELL(1)
+
+AUTHOR
+     Inha Univ.
+     Comp. Sci. Dept.
+     12191579 Kim Jongha
+
+DESCRIPTION
+     This is a shell made by Kim Jongha, a Comp. Sci. soph. of Inha Univ., for the assignment
+     of Operating System Course(004).
+
+COMMANDS
+     * UNIX Commands: ls, pwd, ...
+        - & end of the UNIX commands will run it in background.
+     * Built-In Commands
+        - quit: terminate the shell and print the brief information.
+        - history: prints recent 10 input commands
+        - help: shows manual (this file)

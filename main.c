@@ -70,19 +70,29 @@ int main()
         }
         else if (strcmp(command_rec[circular_cursor_r].input_command, "help\n") == 0)
         {
+            FILE* helpFile = fopen("./help", "r");
 
+            if (helpFile != NULL)
+            {
+                char ch = fgetc(helpFile);
+                while (ch != EOF)
+                {
+                    printf("%c", ch);
+                    ch = fgetc(helpFile);
+                }
+            }
+            else
+            {
+                printf("[Error] Invalid File Access\n");
+            }
+
+            printf("\n");
+            fclose(helpFile);
         }
         // other commands
         else {
             tokenize(&command_rec[circular_cursor_r]);
-            if (command_rec[circular_cursor_r].is_background)
-            {
-                execute_bg(&command_rec[circular_cursor_r]);
-            }
-            else
-            {
-                execute(&command_rec[circular_cursor_r]);
-            }
+            execute(&command_rec[circular_cursor_r]);
         }
 
         // command record management
@@ -151,7 +161,7 @@ void execute(comrec_t* self)
 
     if ((pid = fork()) < 0)
     {
-        printf("error during fork");
+        printf("error during fork\n");
     }
     else if (pid == 0)
     {
@@ -160,26 +170,10 @@ void execute(comrec_t* self)
     }
     else
     {
-        pid = wait(&cur_state);
-        wait(&cur_state);
-        printf("Process %d returned with status %d\n\n", pid, cur_state);
-    }
-}
-
-void execute_bg(comrec_t* self)
-{
-    pid_t pid;
-    int bg;
-
-    if ((pid = fork()) < 0)
-    {
-        printf("error during fork");
-    }
-    else if (pid == 0)
-    {
-        bg = open("/dev/null", O_RDONLY);
-        dup2(bg, STDOUT_FILENO);
-        execvp(self->tokenized[0], self->tokenized);
-        exit(1);
+        if (self->is_background == false)
+        {
+            pid = wait(&cur_state);
+            //printf("Process %d returned with status %d\n\n", pid, cur_state);
+        }
     }
 }

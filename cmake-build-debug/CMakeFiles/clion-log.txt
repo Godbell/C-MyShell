@@ -1,10 +1,4 @@
 C:\Users\GodBell\AppData\Local\JetBrains\CLion2020.3\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /cygdrive/e/Programming/4_C/MyShell
-CMake Error at CMakeLists.txt:8 (add_custom_target):
-  add_custom_target cannot create target "MyShell" because another target
-  with the same name already exists.  The existing target is an executable
-  created in source directory "/cygdrive/e/Programming/4_C/MyShell".  See
-  documentation for policy CMP0002 for more details.
-
-
--- Configuring incomplete, errors occurred!
-See also "/cygdrive/e/Programming/4_C/MyShell/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /cygdrive/e/Programming/4_C/MyShell/cmake-build-debug
