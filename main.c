@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <abc.h>
 
 #define COMMAND_MEM 10
 #define COMMAND_MAX 1024
